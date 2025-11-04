@@ -3,6 +3,11 @@ import { useState, useEffect } from 'react'
 import './App.css'
 
 function App() {
+  // Ironclad OAuth configuration
+  const clientId = 'you client id here';
+  const redirectUri = window.location.origin + '/'; // the IC app has a redirect URI of 'http://localhost:5137/'
+  const scope = 'public.records.readRecords';
+
   const [authCode, setAuthCode] = useState(null);
 
   useEffect(() => {
@@ -23,13 +28,12 @@ function App() {
 
   const login = async () => {
     // Open Ironclad OAuth authorization page
-    const clientId = 'you client id here';
-    const redirectUri = encodeURIComponent(window.location.origin + '/'); // the IC app has a redirect URI of 'http://localhost:5137/'
+    const encodedRedirectUri = encodeURIComponent(redirectUri);
     const responseType = 'code';
-    const scope = encodeURIComponent('public.records.readRecords');
+    const encodedScope = encodeURIComponent(scope);
     const state = encodeURIComponent(Math.random().toString(36).substring(2));
     
-    const authUrl = `https://na1.ironcladapp.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=${responseType}&scope=${scope}&state=${state}`;
+    const authUrl = `https://na1.ironcladapp.com/oauth/authorize?client_id=${clientId}&redirect_uri=${encodedRedirectUri}&response_type=${responseType}&scope=${encodedScope}&state=${state}`;
     console.log('Auth URL:', authUrl); // Debug log to see the generated URL
     window.open(authUrl, "_self");
   }
